@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Zoul Shoe Store</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* CSS Variables for Design System */
+        :root {
+            --primary-green: #047857;
+            --dark-green: #065f46;
+            --light-bg: #f9fafb;
+            --dark-text: #1f2937;
+            --gray-text: #6b7280;
+            --accent-yellow: #fbbf24;
+            --white: #ffffff;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --transition: all 0.3s ease;
+        }
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-text);
+            background-color: var(--light-bg);
+            min-height: 100vh;
+        }
+        /* Header Styles */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            background-color: var(--white);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        .logo span {
+            color: var(--accent-yellow);
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary-green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: 600;
+        }
+        /* Main Content */
+        .main-content {
+            padding: 1.5rem;
+        }
+        .page-title {
+            font-size: 1.75rem;
+            color: var(--dark-text);
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        /* Dashboard Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .stat-card {
+            background-color: var(--white);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        .stat-icon.men {
+            background-color: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+        }
+        .stat-icon.women {
+            background-color: rgba(236, 72, 153, 0.1);
+            color: #ec4899;
+        }
+        .stat-icon.children {
+            background-color: rgba(34, 197, 94, 0.1);
+            color: #22c55e;
+        }
+        .stat-info h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.25rem;
+        }
+        .stat-info p {
+            color: var(--gray-text);
+            font-size: 0.875rem;
+        }
+        /* Content Sections */
+        .content-section {
+            background-color: var(--white);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .section-header h2 {
+            font-size: 1.25rem;
+            color: var(--dark-text);
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background-color: var(--primary-green);
+            color: var(--white);
+            border-radius: 4px;
+            font-weight: 600;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            font-size: 0.875rem;
+        }
+        .btn:hover {
+            background-color: var(--dark-green);
+        }
+        .btn-secondary {
+            background-color: transparent;
+            border: 1px solid var(--primary-green);
+            color: var(--primary-green);
+        }
+        .btn-secondary:hover {
+            background-color: var(--primary-green);
+            color: var(--white);
+        }
+        .btn-danger {
+            background-color: #ef4444;
+        }
+        .btn-danger:hover {
+            background-color: #dc2626;
+        }
+        .btn-sm {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+        }
+        /* Table Styles */
+        .table-container {
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        th {
+            background-color: #f9fafb;
+            font-weight: 600;
+            color: var(--dark-text);
+        }
+        tr:hover {
+            background-color: #f9fafb;
+        }
+        .product-image {
+            width: 50px;
+            height: 50px;
+            border-radius: 4px;
+            object-fit: cover;
+        }
+        .category-badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .category-men {
+            background-color: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+        }
+        .category-women {
+            background-color: rgba(236, 72, 153, 0.1);
+            color: #ec4899;
+        }
+        .category-children {
+            background-color: rgba(34, 197, 94, 0.1);
+            color: #22c55e;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        /* NEW MODAL STYLES FOR SIMPLIFIED PRODUCT FORM */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal.active {
+            display: flex;
+        }
+        .modal-content {
+            background-color: var(--white);
+            border-radius: 8px;
+            width: 90%;
+            max-width: 900px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .modal-header h3 {
+            font-size: 1.25rem;
+            color: var(--dark-text);
+        }
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--gray-text);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .close-modal:hover {
+            color: var(--dark-text);
+        }
+        .modal-body {
+            padding: 1.5rem;
+        }
+        .form-section {
+            margin-bottom: 1.5rem;
+        }
+        .form-section h2 {
+            margin-bottom: 1rem;
+            font-size: 1.125rem;
+            color: var(--dark-text);
+        }
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark-text);
+        }
+        .form-control, .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            font-family: inherit;
+            transition: var(--transition);
+        }
+        .form-control:focus, .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-green);
+            box-shadow: 0 0 0 3px rgba(4, 120, 87, 0.1);
+        }
+        /* Checkbox group for sizes */
+        .option-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+        .option-group label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: normal;
+            cursor: pointer;
+        }
+        /* Image upload placeholder */
+        .image-upload-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            border: 2px dashed #d1d5db;
+            border-radius: 6px;
+            background: #f9fafb;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .image-upload-group:hover {
+            border-color: var(--primary-green);
+        }
+        .image-upload-group input {
+            display: none;
+        }
+        .image-preview {
+            max-width: 100%;
+            max-height: 200px;
+            margin-top: 1rem;
+            border-radius: 4px;
+            display: none;
+        }
+        /* Variant items */
+        .variant-item {
+            background-color: #f9fafb;
+            border-radius: 6px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+        .variant-item h3 {
+            margin-bottom: 1rem;
+            font-size: 1rem;
+            color: var(--dark-text);
+        }
+        .btn-delete {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+            cursor: pointer;
+        }
+        .btn-delete:hover {
+            background: #dc2626;
+        }
+        .btn-add-variant {
+            background: var(--primary-green);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 0.5rem 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+        .btn-add-variant:hover {
+            background: var(--dark-green);
+        }
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            padding: 1.5rem;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        /* Hero Section Styles */
+        .hero-images-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            padding: 1.5rem;
+        }
+        .hero-image-item {
+            background-color: #f9fafb;
+            border-radius: 8px;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .hero-image-preview {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 4px;
+            display: block;
+        }
+        .hero-image-placeholder {
+            width: 100%;
+            height: 200px;
+            background-color: #e5e7eb;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray-text);
+        }
+        .hero-image-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        /* WhatsApp Settings Styles */
+        .whatsapp-settings {
+            padding: 1.5rem;
+        }
+        .whatsapp-form {
+            max-width: 500px;
+        }
+        .whatsapp-preview {
+            margin-top: 1rem;
+            padding: 1rem;
+            background-color: #f9fafb;
+            border-radius: 8px;
+            border-left: 4px solid #25D366;
+        }
+        .whatsapp-preview h4 {
+            color: var(--dark-text);
+            margin-bottom: 0.5rem;
+        }
+        .whatsapp-preview p {
+            color: var(--gray-text);
+            font-size: 0.875rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .grid-3 {
+                grid-template-columns: 1fr;
+            }
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+            .user-info {
+                align-self: flex-end;
+            }
+            .hero-images-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="logo">Zoul<span>Shoes</span> Admin</div>
+        <div class="user-info">
+            <div class="user-avatar">AD</div>
+            <span>Admin User</span>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-content">
+        <h1 class="page-title">Store Management</h1>
+        
+        <!-- Dashboard Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon men">
+                    <i class="fas fa-male"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="men-count">0</h3>
+                    <p>Men's Products</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon women">
+                    <i class="fas fa-female"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="women-count">0</h3>
+                    <p>Women's Products</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon children">
+                    <i class="fas fa-child"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="children-count">0</h3>
+                    <p>Children's Products</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background-color: rgba(245, 158, 11, 0.1); color: #f59e0b;">
+                    <i class="fas fa-boxes"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="total-count">0</h3>
+                    <p>Total Products</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Hero Section Management -->
+        <div class="content-section">
+            <div class="section-header">
+                <h2>Hero Section Images</h2>
+                <button class="btn" id="save-hero-btn">
+                    <i class="fas fa-save"></i> Save Hero Images
+                </button>
+            </div>
+            <div class="hero-images-container" id="hero-images-container">
+                <!-- Hero images will be dynamically loaded here -->
+            </div>
+        </div>
+        
+        <!-- WhatsApp Settings -->
+        <div class="content-section">
+            <div class="section-header">
+                <h2>WhatsApp Ordering</h2>
+                <button class="btn" id="save-whatsapp-btn">
+                    <i class="fas fa-save"></i> Save WhatsApp Settings
+                </button>
+            </div>
+            <div class="whatsapp-settings">
+                <div class="whatsapp-form">
+                    <div class="form-group">
+                        <label for="whatsapp-number">WhatsApp Number for Orders</label>
+                        <input type="text" id="whatsapp-number" class="form-control" placeholder="e.g., +1234567890">
+                        <small style="color: var(--gray-text);">Include country code (e.g., +1 for US)</small>
+                    </div>
+                </div>
+                <div class="whatsapp-preview">
+                    <h4>Preview:</h4>
+                    <p id="whatsapp-preview-text">When customers click "Order via WhatsApp", they will be directed to WhatsApp with this number.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Products Section -->
+        <div class="content-section">
+            <div class="section-header">
+                <h2>All Products</h2>
+                <button class="btn" id="add-product-btn">
+                    <i class="fas fa-plus"></i> Add Product
+                </button>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Image</th>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Variations</th>
+                            <th>Gallery</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="products-table-body">
+                        <!-- Products will be dynamically loaded here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- NEW Add/Edit Product Modal -->
+    <div class="modal" id="product-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">Add New Product</h3>
+                <button class="close-modal" id="close-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="product-form">
+                    <input type="hidden" id="product-id">
+
+                    <!-- General Information -->
+                    <div class="form-section">
+                        <h2>General Information</h2>
+                        <div class="grid-3">
+                            <div class="form-group">
+                                <label for="product-name">Product Name</label>
+                                <input type="text" id="product-name" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="product-category">Target Audience</label>
+                                <select id="product-category" class="form-control" required>
+                                    <option value="">Select Category</option>
+                                    <option value="men">Men</option>
+                                    <option value="women">Women</option>
+                                    <option value="children">Children</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="product-price">Price ($)</label>
+                                <input type="number" id="product-price" class="form-control" min="0" step="0.01" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="product-description">Product Description</label>
+                            <textarea id="product-description" class="form-control" rows="4"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Inventory & Media -->
+                    <div class="form-section">
+                        <h2>Inventory & Media</h2>
+                        <div class="form-group">
+                            <label>Available Sizes</label>
+                            <div class="option-group" id="sizes-checkbox-group">
+                                <!-- Dynamically populated -->
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Main Product Image (Large Display)</label>
+                            <label for="main-image" class="image-upload-group" id="main-image-label">
+                                <p>Click or drag to upload the main product image</p>
+                                <input type="file" id="main-image" accept="image/*">
+                                <img id="main-image-preview" class="image-preview" />
+                            </label>
+                        </div>
+                    </div>
+
+                    <hr style="margin: 1.5rem 0; border-color: #e5e7eb;">
+
+                    <!-- Color Variants -->
+                    <div class="form-section">
+                        <h2>Product Color Variants (Thumbnails)</h2>
+                        <p style="font-style: italic; color: var(--gray-text); margin-bottom: 1rem;">
+                            Each variant requires a name, a color selection, and a specific thumbnail image.
+                        </p>
+                        <div id="color-variants-container">
+                            <!-- Variant items will be added here -->
+                        </div>
+                        <button type="button" class="btn-add-variant" id="add-variant-btn">
+                            + Add New Color Variant
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="cancel-btn">Cancel</button>
+                <button type="button" class="btn" id="save-product-btn">Save Product</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Store data (from localStorage or default)
+        let products = JSON.parse(localStorage.getItem('zoulProducts')) || [];
+        let heroImages = JSON.parse(localStorage.getItem('zoulHeroImages')) || [
+            { id: 1, url: '', file: null },
+            { id: 2, url: '', file: null },
+            { id: 3, url: '', file: null }
+        ];
+        let whatsappSettings = JSON.parse(localStorage.getItem('zoulWhatsApp')) || {
+            number: ''
+        };
+
+        // DOM Elements
+        const productsTableBody = document.getElementById('products-table-body');
+        const addProductBtn = document.getElementById('add-product-btn');
+        const productModal = document.getElementById('product-modal');
+        const closeModal = document.getElementById('close-modal');
+        const cancelBtn = document.getElementById('cancel-btn');
+        const saveProductBtn = document.getElementById('save-product-btn');
+        const productForm = document.getElementById('product-form');
+        const modalTitle = document.getElementById('modal-title');
+        const productIdInput = document.getElementById('product-id');
+        const productNameInput = document.getElementById('product-name');
+        const productCategoryInput = document.getElementById('product-category');
+        const productPriceInput = document.getElementById('product-price');
+        const productDescriptionInput = document.getElementById('product-description');
+        const mainImageInput = document.getElementById('main-image');
+        const mainImagePreview = document.getElementById('main-image-preview');
+        const mainImageLabel = document.getElementById('main-image-label');
+        const sizesCheckboxGroup = document.getElementById('sizes-checkbox-group');
+        const colorVariantsContainer = document.getElementById('color-variants-container');
+        const addVariantBtn = document.getElementById('add-variant-btn');
+        
+        // New elements for hero and WhatsApp
+        const heroImagesContainer = document.getElementById('hero-images-container');
+        const saveHeroBtn = document.getElementById('save-hero-btn');
+        const saveWhatsAppBtn = document.getElementById('save-whatsapp-btn');
+        const whatsappNumberInput = document.getElementById('whatsapp-number');
+        const whatsappPreviewText = document.getElementById('whatsapp-preview-text');
+
+        // Stats elements
+        const menCountElement = document.getElementById('men-count');
+        const womenCountElement = document.getElementById('women-count');
+        const childrenCountElement = document.getElementById('children-count');
+        const totalCountElement = document.getElementById('total-count');
+
+        // State
+        let currentSizes = ["7", "8", "9", "10", "11", "12"]; // default sizes
+        let currentVariants = []; // [{ name, color, file, previewUrl }]
+        let mainImageFile = null;
+
+        // Initialize
+        function initAdminPanel() {
+            renderProductsTable();
+            updateStats();
+            renderHeroImages();
+            renderWhatsAppSettings();
+            setupEventListeners();
+        }
+
+        // Render products table
+        function renderProductsTable() {
+            productsTableBody.innerHTML = '';
+            if (products.length === 0) {
+                productsTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="7" style="text-align: center; padding: 2rem;">
+                            No products found. <a href="#" id="add-first-product" style="color: var(--primary-green);">Add your first product</a>
+                        </td>
+                    </tr>
+                `;
+                document.getElementById('add-first-product').addEventListener('click', openAddModal);
+                return;
+            }
+            products.forEach(product => {
+                const colorCount = product.variations?.colors?.length || 0;
+                const sizeCount = product.variations?.sizes?.length || 0;
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><img src="${product.image}" alt="${product.name}" class="product-image"></td>
+                    <td>${product.name}</td>
+                    <td><span class="category-badge category-${product.category}">${product.category.charAt(0).toUpperCase() + product.category.slice(1)}</span></td>
+                    <td>$${product.price.toFixed(2)}</td>
+                    <td><small>${colorCount} colors, ${sizeCount} sizes</small></td>
+                    <td><small>1 main image</small></td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-secondary edit-product" data-id="${product.id}">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button class="btn btn-danger delete-product" data-id="${product.id}">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </div>
+                    </td>
+                `;
+                productsTableBody.appendChild(row);
+            });
+
+            document.querySelectorAll('.edit-product').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const productId = parseInt(e.target.closest('button').getAttribute('data-id'));
+                    openEditModal(productId);
+                });
+            });
+            document.querySelectorAll('.delete-product').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const productId = parseInt(e.target.closest('button').getAttribute('data-id'));
+                    deleteProduct(productId);
+                });
+            });
+        }
+
+        function updateStats() {
+            const menCount = products.filter(p => p.category === 'men').length;
+            const womenCount = products.filter(p => p.category === 'women').length;
+            const childrenCount = products.filter(p => p.category === 'children').length;
+            const totalCount = products.length;
+            menCountElement.textContent = menCount;
+            womenCountElement.textContent = womenCount;
+            childrenCountElement.textContent = childrenCount;
+            totalCountElement.textContent = totalCount;
+        }
+
+        // Render hero images
+        function renderHeroImages() {
+            heroImagesContainer.innerHTML = '';
+            heroImages.forEach((heroImage, index) => {
+                const heroItem = document.createElement('div');
+                heroItem.className = 'hero-image-item';
+                heroItem.innerHTML = `
+                    <h3>Hero Image ${index + 1}</h3>
+                    ${heroImage.url ? 
+                        `<img src="${heroImage.url}" alt="Hero Image ${index + 1}" class="hero-image-preview">` : 
+                        `<div class="hero-image-placeholder">No Image Uploaded</div>`
+                    }
+                    <div class="form-group">
+                        <label for="hero-image-${index}">Upload Image</label>
+                        <input type="file" id="hero-image-${index}" class="hero-image-input" data-index="${index}" accept="image/*">
+                    </div>
+                    <div class="hero-image-actions">
+                        <button class="btn btn-secondary btn-sm remove-hero-image" data-index="${index}">
+                            <i class="fas fa-trash"></i> Remove
+                        </button>
+                    </div>
+                `;
+                heroImagesContainer.appendChild(heroItem);
+            });
+
+            // Add event listeners for hero image inputs
+            document.querySelectorAll('.hero-image-input').forEach(input => {
+                input.addEventListener('change', handleHeroImageChange);
+            });
+            
+            // Add event listeners for remove buttons
+            document.querySelectorAll('.remove-hero-image').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const index = parseInt(e.target.closest('button').getAttribute('data-index'));
+                    removeHeroImage(index);
+                });
+            });
+        }
+
+        // Render WhatsApp settings
+        function renderWhatsAppSettings() {
+            whatsappNumberInput.value = whatsappSettings.number;
+            updateWhatsAppPreview();
+        }
+
+        function updateWhatsAppPreview() {
+            const number = whatsappNumberInput.value || '[Phone Number]';
+            whatsappPreviewText.textContent = `Customers will message ${number} on WhatsApp to place orders.`;
+        }
+
+        function setupEventListeners() {
+            addProductBtn.addEventListener('click', openAddModal);
+            closeModal.addEventListener('click', closeProductModal);
+            cancelBtn.addEventListener('click', closeProductModal);
+            saveProductBtn.addEventListener('click', saveProduct);
+            addVariantBtn.addEventListener('click', addVariantCard);
+            mainImageInput.addEventListener('change', handleMainImageChange);
+            productModal.addEventListener('click', (e) => {
+                if (e.target === productModal) closeProductModal();
+            });
+            
+            // New event listeners
+            saveHeroBtn.addEventListener('click', saveHeroImages);
+            saveWhatsAppBtn.addEventListener('click', saveWhatsAppSettings);
+            whatsappNumberInput.addEventListener('input', updateWhatsAppPreview);
+        }
+
+        function openAddModal() {
+            modalTitle.textContent = 'Add New Product';
+            productForm.reset();
+            productIdInput.value = '';
+            mainImageFile = null;
+            mainImagePreview.style.display = 'none';
+            mainImagePreview.src = '';
+            currentVariants = [];
+            renderSizesCheckboxes();
+            renderVariants();
+            productModal.classList.add('active');
+        }
+
+        function openEditModal(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+
+            modalTitle.textContent = 'Edit Product';
+            productIdInput.value = product.id;
+            productNameInput.value = product.name;
+            productCategoryInput.value = product.category;
+            productPriceInput.value = product.price;
+            productDescriptionInput.value = product.description || '';
+
+            // Simulate main image (we store URL, not file)
+            mainImagePreview.src = product.image;
+            mainImagePreview.style.display = 'block';
+            mainImageFile = null; // Can't edit file in edit mode without re-upload
+
+            // Load variants
+            currentVariants = (product.variations?.colors || []).map(color => ({
+                name: color.name,
+                color: color.value,
+                previewUrl: color.thumbnail || product.image // fallback
+            }));
+
+            renderSizesCheckboxes();
+            renderVariants();
+            productModal.classList.add('active');
+        }
+
+        function closeProductModal() {
+            productModal.classList.remove('active');
+        }
+
+        function renderSizesCheckboxes() {
+            sizesCheckboxGroup.innerHTML = '';
+            const allSizes = ["7", "8", "9", "10", "11", "12"];
+            allSizes.forEach(size => {
+                const div = document.createElement('label');
+                div.innerHTML = `
+                    <input type="checkbox" value="${size}" id="size-${size}">
+                    <span>${size}</span>
+                `;
+                sizesCheckboxGroup.appendChild(div);
+            });
+        }
+
+        function addVariantCard() {
+            const variant = {
+                id: Date.now(),
+                name: '',
+                color: '#000000',
+                file: null,
+                previewUrl: ''
+            };
+            currentVariants.push(variant);
+            renderVariants();
+        }
+
+        function renderVariants() {
+            colorVariantsContainer.innerHTML = '';
+            currentVariants.forEach((variant, index) => {
+                const variantEl = document.createElement('div');
+                variantEl.className = 'variant-item';
+                variantEl.innerHTML = `
+                    <h3>Variant #${index + 1}: ${variant.name || 'Unnamed'}</h3>
+                    <button class="btn-delete" data-index="${index}">Delete</button>
+                    <div class="grid-3">
+                        <div class="form-group">
+                            <label>Color Name</label>
+                            <input type="text" class="variant-name" data-index="${index}" value="${variant.name}" placeholder="e.g., Red">
+                        </div>
+                        <div class="form-group">
+                            <label>Select Color Swatch</label>
+                            <input type="color" class="variant-color" data-index="${index}" value="${variant.color}">
+                        </div>
+                        <div class="form-group">
+                            <label>Thumbnail Image</label>
+                            <label class="image-upload-group variant-upload" data-index="${index}">
+                                <p>Upload thumbnail</p>
+                                <input type="file" class="variant-file" accept="image/*" data-index="${index}">
+                                <img class="variant-preview" src="${variant.previewUrl}" style="display: ${variant.previewUrl ? 'block' : 'none'}; max-height: 100px;">
+                            </label>
+                        </div>
+                    </div>
+                `;
+                colorVariantsContainer.appendChild(variantEl);
+            });
+
+            // Add event listeners
+            document.querySelectorAll('.btn-delete').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const index = parseInt(e.target.getAttribute('data-index'));
+                    currentVariants.splice(index, 1);
+                    renderVariants();
+                });
+            });
+            document.querySelectorAll('.variant-name').forEach(input => {
+                input.addEventListener('input', (e) => {
+                    const index = parseInt(e.target.getAttribute('data-index'));
+                    currentVariants[index].name = e.target.value;
+                });
+            });
+            document.querySelectorAll('.variant-color').forEach(input => {
+                input.addEventListener('input', (e) => {
+                    const index = parseInt(e.target.getAttribute('data-index'));
+                    currentVariants[index].color = e.target.value;
+                });
+            });
+            document.querySelectorAll('.variant-file').forEach(input => {
+                input.addEventListener('change', (e) => {
+                    const index = parseInt(e.target.getAttribute('data-index'));
+                    const file = e.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = (ev) => {
+                            currentVariants[index].file = file;
+                            currentVariants[index].previewUrl = ev.target.result;
+                            renderVariants();
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+            });
+        }
+
+        function handleMainImageChange(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    mainImageFile = file;
+                    mainImagePreview.src = ev.target.result;
+                    mainImagePreview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Handle hero image changes
+        function handleHeroImageChange(e) {
+            const index = parseInt(e.target.getAttribute('data-index'));
+            const file = e.target.files[0];
+            
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    heroImages[index].file = file;
+                    heroImages[index].url = ev.target.result;
+                    renderHeroImages();
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Remove hero image
+        function removeHeroImage(index) {
+            heroImages[index].file = null;
+            heroImages[index].url = '';
+            renderHeroImages();
+        }
+
+        // Save hero images
+        function saveHeroImages() {
+            localStorage.setItem('zoulHeroImages', JSON.stringify(heroImages));
+            alert('Hero images saved successfully!');
+        }
+
+        // Save WhatsApp settings
+        function saveWhatsAppSettings() {
+            whatsappSettings.number = whatsappNumberInput.value.trim();
+            
+            localStorage.setItem('zoulWhatsApp', JSON.stringify(whatsappSettings));
+            alert('WhatsApp settings saved successfully!');
+        }
+
+        function saveProduct() {
+            const name = productNameInput.value.trim();
+            const category = productCategoryInput.value;
+            const price = parseFloat(productPriceInput.value);
+            const description = productDescriptionInput.value.trim();
+
+            if (!name || !category || isNaN(price)) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+
+            const selectedSizes = Array.from(sizesCheckboxGroup.querySelectorAll('input:checked')).map(cb => cb.value);
+            if (selectedSizes.length === 0) {
+                alert('Please select at least one size.');
+                return;
+            }
+
+            if (currentVariants.length === 0) {
+                alert('Please add at least one color variant.');
+                return;
+            }
+
+            // For demo: use preview URL as image (in real app, upload to server)
+            const mainImageUrl = mainImageFile 
+                ? mainImagePreview.src 
+                : (productIdInput.value ? products.find(p => p.id == productIdInput.value)?.image : '');
+
+            if (!mainImageUrl) {
+                alert('Please upload a main product image.');
+                return;
+            }
+
+            // Build product object
+            const productData = {
+                id: productIdInput.value ? parseInt(productIdInput.value) : generateId(),
+                name,
+                category,
+                price,
+                image: mainImageUrl,
+                description,
+                variations: {
+                    sizes: selectedSizes,
+                    colors: currentVariants.map(v => ({
+                        name: v.name || 'Unnamed',
+                        value: v.color,
+                        thumbnail: v.previewUrl || mainImageUrl
+                    }))
+                }
+            };
+
+            if (productIdInput.value) {
+                const index = products.findIndex(p => p.id == productIdInput.value);
+                if (index !== -1) products[index] = productData;
+            } else {
+                products.push(productData);
+            }
+
+            localStorage.setItem('zoulProducts', JSON.stringify(products));
+            renderProductsTable();
+            updateStats();
+            closeProductModal();
+            alert(`Product ${productIdInput.value ? 'updated' : 'added'} successfully!`);
+        }
+
+        function deleteProduct(productId) {
+            if (confirm('Are you sure you want to delete this product?')) {
+                products = products.filter(p => p.id !== productId);
+                localStorage.setItem('zoulProducts', JSON.stringify(products));
+                renderProductsTable();
+                updateStats();
+                alert('Product deleted successfully!');
+            }
+        }
+
+        function generateId() {
+            return products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1;
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', initAdminPanel);
+    </script>
+</body>
+</html>
